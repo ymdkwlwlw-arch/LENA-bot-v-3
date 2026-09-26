@@ -5,12 +5,12 @@ const crypto = require('crypto');
 module.exports = {
  config: {
  name: 'note',
- version: '0.0.1',
+ version: '1.0.0',
  hasPermssion: 3,
- credits: 'DC-Nam',
- description: 'https://niiozic.site/note/:UUID',
- commandCategory: 'Admin',
- usages: '[]',
+ credits: 'DC-Nam & AI',
+ description: 'رفع وتنزيل الأكواد عبر روابط سحابية (خاص بالمطور)',
+ commandCategory: 'المطور',
+ usages: 'note [اسم الملف] أو الرد برابط',
  prefix: false,
  cooldowns: 3,
  },
@@ -18,11 +18,11 @@ module.exports = {
  const name = module.exports.config.name;
  const url = o.event?.messageReply?.args?.[0] || o.args[1];
  let path = `${__dirname}/${o.args[0]}`;
- const send = msg=>new Promise(r=>o.api.sendMessage(msg, o.event.threadID, (err, res)=>r(res), o.event.messageID));
+ const send = msg => new Promise(r => o.api.sendMessage(`╭─❖ [ نظام الملاحظات ] ❖─╮\n\n${msg}\n\n╰───────────────╯`, o.event.threadID, (err, res) => r(res), o.event.messageID));
 
  try {
  if (/^https:\/\//.test(url)) {
- return send(`🔗 File: ${path}\n\nThả cảm xúc để xác nhận thay thế nội dung file`).then(res=> {
+ return send(`🔗 مسار الملف:\n${path}\n\n📌 تفاعل مع هذه الرسالة (بأي إيموجي) لتأكيد جلب الكود واستبدال محتوى الملف.`).then(res => {
  res = {
  ...res,
  name,
@@ -34,17 +34,19 @@ module.exports = {
  global.client.handleReaction.push(res);
  });
  } else {
- //if (o.args[0] === 'edit' && o.args[1])path = `${__dirname}/${o.args[1]}`;
- if (!fs.existsSync(path))return send(`❎ Đường dẫn file không tồn tại để export`);
+ if (!o.args[0]) return send(`⚠️ يرجى كتابة اسم الملف المراد رفعه.\n📝 مثال: note admin.js`);
+ if (!fs.existsSync(path)) return send(`❎ عذراً، مسار الملف غير موجود على السيرفر.`);
+ 
  const uuid_raw = crypto.randomUUID();
  const url_raw = new URL(`https://api.dungkon.id.vn/note/${uuid_raw}`);
  const url_redirect = new URL(`https://api.dungkon.id.vn/note/${crypto.randomUUID()}`);
+ 
  await axios.put(url_raw.href, fs.readFileSync(path, 'utf8'));
  url_redirect.searchParams.append('raw', uuid_raw);
  await axios.put(url_redirect.href);
  url_redirect.searchParams.delete('raw');
- //url_redirect.searchParams.append('raw', 'true');
- return send(`📝 Raw: ${url_redirect.href}\n\n✏️ Edit: ${url_raw.href}\n────────────────\n• File: ${path}\n\n📌 Thả cảm xúc để upload code`).then(res=> {
+
+ return send(`📝 رابط العرض: ${url_redirect.href}\n\n✏️ رابط التعديل: ${url_raw.href}\n────────────────\n📂 الملف: ${o.args[0]}\n\n📌 تفاعل مع هذه الرسالة (بأي إيموجي) لتأكيد رفع وتحديث الكود.`).then(res => {
  res = {
  ...res,
  name,
@@ -58,15 +60,15 @@ module.exports = {
  }
  } catch(e) {
  console.error(e);
- send(e.toString());
+ send(`❎ حدث خطأ:\n${e.toString()}`);
  }
  },
  handleReaction: async function(o) {
  const _ = o.handleReaction;
- const send = msg=>new Promise(r=>o.api.sendMessage(msg, o.event.threadID, (err, res)=>r(res), o.event.messageID));
+ const send = msg => new Promise(r => o.api.sendMessage(`╭─❖ [ نظام الملاحظات ] ❖─╮\n\n${msg}\n\n╰───────────────╯`, o.event.threadID, (err, res) => r(res), o.event.messageID));
 
  try {
- if (o.event.userID != _.o.event.senderID)return;
+ if (o.event.userID != _.o.event.senderID) return;
 
  switch (_.action) {
  case 'confirm_replace_content': {
@@ -75,7 +77,7 @@ module.exports = {
  })).data;
 
  fs.writeFileSync(_.path, content);
- send(`✅ Đã upload code thành công\n\n🔗 File: ${_.path}`).then(res=> {
+ send(`✅ تم تحديث ورفع الكود بنجاح!\n\n📂 المسار:\n${_.path}`).then(res => {
  res = {
  ..._,
  ...res,
@@ -89,7 +91,7 @@ module.exports = {
  }
  } catch(e) {
  console.error(e);
- send(e.toString());
+ send(`❎ حدث خطأ أثناء المعالجة:\n${e.toString()}`);
  }
  }
 }
