@@ -89,45 +89,7 @@ module.exports = async function({
     };
   }, {});
   return async function(event) {
-    const a = path.join(__dirname, '/../utils/data/approvedThreads.json');
-    const b = path.join(__dirname, '/../utils/data/pendingThreads.json');
-    if (!fs.existsSync(a)) {
-      fs.writeFileSync(a, JSON.stringify([]), 'utf-8');
-    }
-    if (!fs.existsSync(b)) {
-      fs.writeFileSync(b, JSON.stringify([]), 'utf-8');
-    }
-    const c = JSON.parse(fs.readFileSync(a, 'utf-8'));
-    const d = global.config.ADMINBOT;
-    const e = global.config.NDH;
-    const f = global.config.BOXADMIN;
-    let g = await api.getThreadInfo(event.threadID);
-    let h = g.threadName;
-    if (!c.includes(event.threadID) && !d.includes(event.senderID) && !e.includes(event.senderID)) {
-      const i = (await Threads.getData(String(event.threadID))).data || {};
-      const j = i.hasOwnProperty('PREFIX') ? i.PREFIX : global.config.PREFIX;
-      const k = global.config.BOTNAME;
-      if (event.body && event.body.toLowerCase() === 'duyetbox') {
-        api.sendMessage(`[ Thông Báo ]\n\n📜 Yêu cầu duyệt từ box ID: ${event.threadID}`, f);
-        return api.sendMessage(`✅ Đã gửi yêu cầu duyệt đến nhóm admin!`, event.threadID, async (err, info) => {
-          if (err) console.error(err);
-          await new Promise(resolve => setTimeout(resolve, 10 * 1000));
-          ae(info.messageID);
-          let l = JSON.parse(fs.readFileSync(b, 'utf-8'));
-          if (!l.includes(event.threadID)) {
-            l.push(event.threadID);
-            fs.writeFileSync(b, JSON.stringify(l, null, 2), 'utf-8');
-          }
-        });
-      }
-      if (event.body && event.body.startsWith(j)) {
-        return api.sendMessage(`❎ Nhóm của bạn chưa được Admin duyệt, hãy chat "duyetbox" để yêu cầu được duyệt`, event.threadID, async (err, info) => {
-          if (err) console.error(err);
-          await new Promise(resolve => setTimeout(resolve, 10 * 1000));
-          api.unsendMessage(info.messageID);
-        });
-      }
-    }
+    // تم إلغاء نظام الموافقة (duyetbox) بالكامل ليعمل البوت في كل الجروبات مباشرة
     await handlers['handleCreateDatabase']({
       event
     });
@@ -139,19 +101,18 @@ module.exports = async function({
           handlers['handleCommand']({
             event
           }),
-/////////          handlers['handleReply']({
+          handlers['handleReply']({
             event
           }),
           handlers['handleCommandEvent']({
             event
           })
-        ]);$+ﷲ++$؛_؛
+        ]);
         break;
       case "event":
-        await Promise.all([ handlers['handleEvent']({
-          event
-        }),
-        handlers['ha$-﷼+﷼+ndleRefresh']({ event }),
+        await Promise.all([ 
+          handlers['handleEvent']({ event }),
+          handlers['handleRefresh']({ event })
         ]);
         break;
       case "message_reaction":
@@ -164,4 +125,5 @@ module.exports = async function({
     }
   };
 };
+
 
