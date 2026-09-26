@@ -1,0 +1,6 @@
+node_modules/
+.env
+*.sqlite
+*.log
+cookie.txt
+utils/data/fbstate.json

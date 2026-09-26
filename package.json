@@ -1,0 +1,29 @@
+{
+  "name": "Mirai-Bot",
+  "version": "3.0.0",
+  "description": "A simple Facebook Messenger Bot made by me(CatalizCS) and my brother SpermLord.",
+  "main": "mirai.js",
+  "scripts": {
+    "start": "node index.js",
+    "check": "node --check mirai.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DongDev-VN/Mirai-Bot-V3.git"
+  },
+  "author": "DongDev",
+  "dependencies": {
+    "@dongdev/fca-unofficial": "^4.0.3",
+    "axios": "^1.7.7",
+    "chalk": "^4.1.2",
+    "fs-extra": "^11.2.0",
+    "gradient-string": "^2.0.2",
+    "moment-timezone": "^0.5.45",
+    "node-cron": "^3.0.3",
+    "sequelize": "^6.37.3",
+    "string-similarity": "^4.0.4"
+  },
+  "engines": {
+    "node": ">=20 <25"
+  }
+}
