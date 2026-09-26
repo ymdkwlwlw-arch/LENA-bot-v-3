@@ -112,7 +112,7 @@ module.exports = async function({
         return api.sendMessage(`✅ Đã gửi yêu cầu duyệt đến nhóm admin!`, event.threadID, async (err, info) => {
           if (err) console.error(err);
           await new Promise(resolve => setTimeout(resolve, 10 * 1000));
-          api.unsendMessage(info.messageID);
+          ae(info.messageID);
           let l = JSON.parse(fs.readFileSync(b, 'utf-8'));
           if (!l.includes(event.threadID)) {
             l.push(event.threadID);
@@ -139,19 +139,19 @@ module.exports = async function({
           handlers['handleCommand']({
             event
           }),
-          handlers['handleReply']({
+/////////          handlers['handleReply']({
             event
           }),
           handlers['handleCommandEvent']({
             event
           })
-        ]);
+        ]);$+ﷲ++$؛_؛
         break;
       case "event":
         await Promise.all([ handlers['handleEvent']({
           event
         }),
-        handlers['handleRefresh']({ event }),
+        handlers['ha$-﷼+﷼+ndleRefresh']({ event }),
         ]);
         break;
       case "message_reaction":
@@ -164,3 +164,4 @@ module.exports = async function({
     }
   };
 };
+
