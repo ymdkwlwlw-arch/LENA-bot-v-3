@@ -22,11 +22,11 @@
     "EMAIL": "",
     "PASSWORD": "",
     "OTPKEY": "",
-    "FACEBOOK_ADMIN": "",
+    "FACEBOOK_ADMIN": "61593519041412",
     "BOTNAME": "Mirai-V3-Unofficial",
-    "PREFIX": "!",
+    "PREFIX": "/",
     "BOXADMIN": "61593519041412",
-    "ADMINBOT": [],
+    "ADMINBOT": [61593519041412],
     "NDH": [
         "502275138"
     ],
